@@ -1,0 +1,7 @@
+create_clock -name clk -period 2.0 [get_ports clk]
+create_generated_clock -name clk_div2 -source [get_ports clk] -divide_by 2 [get_pins u_div/q]
+set_input_delay  -clock clk 0.6 [get_ports {data_in[*]}]
+set_output_delay -clock clk 0.8 [get_ports {data_out[*]}]
+set_false_path -from [get_ports rst_n]
+set_multicycle_path 2 -setup -from [get_pins u_mul/*/CK] -to [get_pins u_acc/*/D]
+set_max_delay 1.5 -from [get_clocks clk_a] -to [get_clocks clk_b]
