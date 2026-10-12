@@ -1,0 +1,29 @@
+variables and substitution
+set top   "cpu_core"
+set clk_p 2.0                     ;# ns
+puts "Design $top, period ${clk_p} ns"
+
+# arithmetic uses expr
+set half [expr {$clk_p / 2.0}]
+
+# lists
+set corners {ss_0p72v_125c tt_0p80v_25c ff_0p88v_m40c}
+foreach c $corners { puts "corner: $c" }
+puts [llength $corners]
+puts [lindex $corners 0]
+
+# control flow
+if {$clk_p < 1.0} { puts "fast clock" } else { puts "normal clock" }
+for {set i 0} {$i < 4} {incr i} { puts "iteration $i" }
+
+# procedures
+proc report_header {name} {
+    puts "===== $name ====="
+}
+report_header "Timing summary"
+
+# string handling and regular expressions
+set cell "AND2_X4"
+if {[regexp {^(\w+)_X(\d+)$} $cell -> func drive]} {
+    puts "function $func drive $drive"
+}
