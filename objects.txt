@@ -1,0 +1,15 @@
+# all flip-flops in a hierarchy
+set regs [get_cells -hier -filter "is_sequential == true" u_core/*]
+
+# count cells by reference name
+foreach_in_collection c [get_cells -hier *] {
+    set ref [get_attribute $c ref_name]
+    incr count($ref)
+}
+foreach r [lsort [array names count]] { puts "$r : $count($r)" }
+
+# upsize every buffer driving a long net
+foreach_in_collection n [get_nets -filter "wire_length > 500"] {
+    set drv [get_pins -leaf -of_objects $n -filter "direction == out"]
+    size_cell [get_cells -of_objects $drv] BUF_X8
+}
